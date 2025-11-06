@@ -1,0 +1,41 @@
+### IntelliJ IDEA ###
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+.kotlin
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+# Arquivos de configuração específicos do IntelliJ IDEA
+.idea/
+*.iml
+
+# Arquivos .class (para garantir que nenhum seja enviado,
+# mesmo os que estavam soltos na pasta src)
+*.class
+
+# Arquivo de saída de teste
+minha_saida.txt
