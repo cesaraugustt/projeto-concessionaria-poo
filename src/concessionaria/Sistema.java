@@ -1,5 +1,9 @@
 package concessionaria;
 
+import concessionaria.exceptions.ClienteNaoEncontradoException;
+import concessionaria.exceptions.GerenteNaoEncontradoException;
+import concessionaria.exceptions.VeiculoNaoEncontradoException;
+import concessionaria.exceptions.VendedorNaoEncontradoException;
 import java.util.ArrayList;
 
 public class Sistema {
@@ -61,39 +65,40 @@ public class Sistema {
         }
     }
 
-    public Cliente localizarCliente(String cpf) {
+    public Cliente localizarCliente(String cpf) throws ClienteNaoEncontradoException {
         for (Cliente c : this.clientes) {
             if (c.getCpf().equals(cpf)) {
                 return c;
             }
         }
-        return null;
+        throw new ClienteNaoEncontradoException("Cliente com CPF " + cpf + " não encontrado.");
     }
 
-    public Vendedor localizarVendedor(String cpf) {
+    public Vendedor localizarVendedor(String cpf) throws VendedorNaoEncontradoException {
         for (Vendedor v : this.vendedores) {
             if (v.getCpf().equals(cpf)) {
                 return v;
             }
         }
-        return null;
+        throw new VendedorNaoEncontradoException("Vendedor com CPF " + cpf + " não encontrado.");
     }
 
-    public Gerente localizarGerente(String cpf) {
+    public Gerente localizarGerente(String cpf) throws GerenteNaoEncontradoException {
         for (Gerente g : this.gerentes) {
             if (g.getCpf().equals(cpf)) {
                 return g;
             }
         }
-        return null;
+        throw new GerenteNaoEncontradoException("Gerente com CPF " + cpf + " não encontrado.");
     }
 
-    public Veiculo localizarVeiculo(int indice) {
+    public Veiculo localizarVeiculo(int indice) throws VeiculoNaoEncontradoException {
         if (indice > 0 && indice <= this.veiculos.size()) {
             return this.veiculos.get(indice - 1);
         }
-        return null;
+        throw new VeiculoNaoEncontradoException("Veículo com índice " + indice + " não encontrado.");
     }
+
 
     public void atribuirVendaVendedor(Venda venda, Vendedor vendedor) {
         vendedor.addVenda(venda);

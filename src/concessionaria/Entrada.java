@@ -1,5 +1,9 @@
 package concessionaria;
 
+import concessionaria.exceptions.ClienteNaoEncontradoException;
+import concessionaria.exceptions.VeiculoNaoEncontradoException;
+import concessionaria.exceptions.VendedorNaoEncontradoException;
+import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -9,6 +13,12 @@ public class Entrada {
     public Entrada() {
         this.input = new Scanner(System.in);
         this.input.useLocale(Locale.US);
+    }
+
+    public void close() {
+        if (input != null) {
+            input.close();
+        }
     }
 
     private String lerProximaLinha() {
@@ -28,15 +38,27 @@ public class Entrada {
     }
 
     private int lerInteiro(String msg) {
-        // System.out.print(msg);
-        String linha = lerProximaLinha();
-        return Integer.parseInt(linha);
+        while (true) {
+            try {
+                // System.out.print(msg);
+                String linha = lerProximaLinha();
+                return Integer.parseInt(linha);
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número inteiro.");
+            }
+        }
     }
 
     private double lerDouble(String msg) {
-        // System.out.print(msg);
-        String linha = lerProximaLinha();
-        return Double.parseDouble(linha);
+        while (true) {
+            try {
+                // System.out.print(msg);
+                String linha = lerProximaLinha();
+                return Double.parseDouble(linha);
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número decimal.");
+            }
+        }
     }
 
     public int menu(Sistema sistema) {
@@ -145,42 +167,33 @@ public class Entrada {
 
     public void cadVenda(Sistema s) {
         // System.out.println("--- Cadastro de Venda ---");
+        try {
+            // s.listarVendedores();
+            String cpfVendedor = lerLinha("Digite o CPF do vendedor: ");
+            Vendedor vendedor = s.localizarVendedor(cpfVendedor);
 
-        // s.listarVendedores();
-        String cpfVendedor = lerLinha("Digite o CPF do vendedor: ");
-        Vendedor vendedor = s.localizarVendedor(cpfVendedor);
-        if (vendedor == null) {
-            System.out.println("Vendedor não localizado! Cadastro de venda cancelado.");
-            return;
+            // s.listarVeiculos();
+            int numVeiculo = lerInteiro("Escolha um veículo pelo número: ");
+            Veiculo veiculo = s.localizarVeiculo(numVeiculo);
+
+            // s.listarClientes();
+            String cpfCliente = lerLinha("Digite o CPF do cliente: ");
+            Cliente cliente = s.localizarCliente(cpfCliente);
+
+            double desconto = lerDouble("Digite o desconto (em R$): ");
+            int dia = lerInteiro("Digite o dia da venda: ");
+            int mes = lerInteiro("Digite o mês da venda: ");
+            int ano = lerInteiro("Digite o ano da venda: ");
+            Data dataVenda = new Data(dia, mes, ano);
+            String chassi = lerLinha("Digite o chassi do veículo: ");
+
+            Venda novaVenda = new Venda(veiculo, cliente, desconto, dataVenda, chassi);
+            s.atribuirVendaVendedor(novaVenda, vendedor);
+
+            // System.out.println("Venda cadastrada com sucesso!");
+        } catch (VendedorNaoEncontradoException | VeiculoNaoEncontradoException | ClienteNaoEncontradoException e) {
+            System.out.println("Erro ao cadastrar venda: " + e.getMessage());
         }
-
-        // s.listarVeiculos();
-        int numVeiculo = lerInteiro("Escolha um veículo pelo número: ");
-        Veiculo veiculo = s.localizarVeiculo(numVeiculo);
-        if (veiculo == null) {
-            System.out.println("Veículo não localizado! Cadastro de venda cancelado.");
-            return;
-        }
-
-        // s.listarClientes();
-        String cpfCliente = lerLinha("Digite o CPF do cliente: ");
-        Cliente cliente = s.localizarCliente(cpfCliente);
-        if (cliente == null) {
-            System.out.println("Cliente não localizado! Cadastro de venda cancelado.");
-            return;
-        }
-
-        double desconto = lerDouble("Digite o desconto (em R$): ");
-        int dia = lerInteiro("Digite o dia da venda: ");
-        int mes = lerInteiro("Digite o mês da venda: ");
-        int ano = lerInteiro("Digite o ano da venda: ");
-        Data dataVenda = new Data(dia, mes, ano);
-        String chassi = lerLinha("Digite o chassi do veículo: ");
-
-        Venda novaVenda = new Venda(veiculo, cliente, desconto, dataVenda, chassi);
-        s.atribuirVendaVendedor(novaVenda, vendedor);
-
-       // System.out.println("Venda cadastrada com sucesso!");
     }
 
     public void relatorioMensal(Sistema s) {
@@ -198,13 +211,13 @@ public class Entrada {
 
     public void relatorioVendedor(Sistema s) {
         // System.out.println("--- Relatório por Vendedor ---");
-        // s.listarVendedores();
-        String cpf = lerLinha("Digite o CPF do vendedor: ");
-        Vendedor v = s.localizarVendedor(cpf);
-        if (v != null) {
+        try {
+            // s.listarVendedores();
+            String cpf = lerLinha("Digite o CPF do vendedor: ");
+            Vendedor v = s.localizarVendedor(cpf);
             s.relatorio(v);
-        } else {
-            System.out.println("Vendedor não localizado.");
+        } catch (VendedorNaoEncontradoException e) {
+            System.out.println("Erro ao gerar relatório: " + e.getMessage());
         }
     }
 }
