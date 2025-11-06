@@ -1,0 +1,40 @@
+
+RELATÓRIO DE VENDAS MENSAL DE 9/2025:
+Vendedor: Maria da Silva (Salário neste mês: R$3388.0)
+Veiculo: BYD Song Pro 2025/2026 - Autonomia: 1110.0km (Híbrido)
+Cliente: Hilario Seibel Junior - CPF: 123 - hsjunior@gmail.com
+Valor da venda: R$194000.0
+Data: 5/9/2025
+***************************************
+Total: R$194000.0
+
+RELATÓRIO DE VENDAS ANUAL DE 2025:
+Vendedor: Maria da Silva
+Veiculo: BYD Song Pro 2025/2026 - Autonomia: 1110.0km (Híbrido)
+Cliente: Hilario Seibel Junior - CPF: 123 - hsjunior@gmail.com
+Valor da venda: R$194000.0
+Data: 5/9/2025
+***************************************
+Vendedor: Maria da Silva
+Veiculo: Honda HRV 2015/2016 - Autonomia: 400.0km (Combustão)
+Cliente: Wagner Kirmse - CPF: 234 - wagnerkc@gmail.com
+Valor da venda: R$67500.0
+Data: 10/10/2025
+***************************************
+Total: R$261500.0
+
+
+RELATÓRIO DE VENDAS DO VENDEDOR:
+Vendas do vendedor Maria da Silva:
+Veiculo: BYD Song Pro 2025/2026 - Autonomia: 1110.0km (Híbrido)
+Cliente: Hilario Seibel Junior - CPF: 123 - hsjunior@gmail.com
+Valor da venda: R$194000.0
+Data: 5/9/2025
+***************************************
+Veiculo: Honda HRV 2015/2016 - Autonomia: 400.0km (Combustão)
+Cliente: Wagner Kirmse - CPF: 234 - wagnerkc@gmail.com
+Valor da venda: R$67500.0
+Data: 10/10/2025
+***************************************
+Total: R$261500.0
+

@@ -38,4 +38,4 @@ bin/
 *.class
 
 # Arquivo de saída de teste
-minha_saida.txt
+minha_saida.txt*.zip
