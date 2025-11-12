@@ -16,6 +16,10 @@ public class Combustao extends Veiculo{
         return this.autonomiaComb;
     }
 
+    public double getCapacidadeComb() {
+        return capacidadeComb;
+    }
+
     @Override
     public String toString() {
         return super.toString() + " (Combustão)";

@@ -30,6 +30,14 @@ public class Vendedor extends Funcionario{
         return super.getSalario(mes, ano) + this.comissaoTotal(mes, ano);
     }
 
+    public double getSalarioBase() {
+        return super.getSalario(0, 0);
+    }
+
+    public double getComissao() {
+        return comissao;
+    }
+
     public ArrayList<Venda> getVendidos() {
         return this.vendidos;
     }

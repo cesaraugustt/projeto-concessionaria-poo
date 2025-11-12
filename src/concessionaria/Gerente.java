@@ -11,4 +11,8 @@ public class Gerente extends Funcionario{
     public boolean validarAcesso(String senha) {
         return this.senha.equals(senha);
     }
+
+    public String getSenha() {
+        return senha;
+    }
 }
