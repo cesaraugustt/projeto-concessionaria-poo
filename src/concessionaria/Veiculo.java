@@ -1,6 +1,6 @@
 package concessionaria;
 
-public class Veiculo {
+public abstract class Veiculo {
     protected String marca;
     protected String modelo;
     protected int anoFab;
@@ -37,9 +37,7 @@ public class Veiculo {
         return anoMod;
     }
 
-    public double getAutonomia() {
-        return 0;
-    }
+    public abstract double getAutonomia();
 
     public double getValor() {
         return this.valor;

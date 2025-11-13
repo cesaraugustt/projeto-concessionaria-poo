@@ -14,5 +14,6 @@
 ./src/concessionaria/Data.java
 ./src/concessionaria/Vendedor.java
 ./src/concessionaria/Cliente.java
+./src/concessionaria/IAutenticavel.java
 ./src/concessionaria/Sistema.java
 ./src/concessionaria/Eletrico.java
