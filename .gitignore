@@ -33,10 +33,9 @@ bin/
 .idea/
 *.iml
 
-# Arquivos .class (para garantir que nenhum seja enviado,
-# mesmo os que estavam soltos na pasta src)
+# Arquivos .class
 *.class
 
 # Arquivo de saída de teste
-minha_saida.txt
+*.txt
 *.zip
