@@ -5,6 +5,12 @@ import concessionaria.exceptions.GerenteNaoEncontradoException;
 import concessionaria.exceptions.VeiculoNaoEncontradoException;
 import concessionaria.exceptions.VendedorNaoEncontradoException;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class Sistema {
     private ArrayList<Veiculo> veiculos;
@@ -17,22 +23,203 @@ public class Sistema {
         this.vendedores = new ArrayList<>();
         this.gerentes = new ArrayList<>();
         this.clientes = new ArrayList<>();
+        carregarDados();
+    }
+
+    private void salvarVeiculos() {
+        try (PrintWriter out = new PrintWriter(new FileWriter("veiculos.txt"))) {
+            for (Veiculo v : veiculos) {
+                String commonPart = v.getMarca() + ";" + v.getModelo() + ";" + v.getAnoFab() + ";" + v.getMesFab() + ";"
+                        + v.getAnoMod() + ";" + v.getValor();
+                if (v instanceof Combustao) {
+                    Combustao c = (Combustao) v;
+                    out.println("COMB;" + commonPart + ";" + c.getAutonomia() + ";" + c.getCapacidadeComb());
+                } else if (v instanceof Eletrico) {
+                    Eletrico e = (Eletrico) v;
+                    out.println("ELET;" + commonPart + ";" + e.getAutonomia() + ";" + e.getCapacidadeBat());
+                } else if (v instanceof Hibrido) {
+                    Hibrido h = (Hibrido) v;
+                    out.println("HIBR;" + commonPart + ";" + h.getAutonomiaComb() + ";" + h.getCapacidadeComb() + ";"
+                            + h.getAutonomiaBat() + ";" + h.getCapacidadeBat());
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar veículos: " + e.getMessage());
+        }
+    }
+
+    private void salvarClientes() {
+        try (PrintWriter out = new PrintWriter(new FileWriter("clientes.txt"))) {
+            for (Cliente c : clientes) {
+                out.println(c.getNome() + ";" + c.getCpf() + ";" + c.getNasc().getDia() + ";" + c.getNasc().getMes()
+                        + ";" + c.getNasc().getAno() + ";" + c.getEmail());
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar clientes: " + e.getMessage());
+        }
+    }
+
+    private void salvarVendedores() {
+        try (PrintWriter out = new PrintWriter(new FileWriter("vendedores.txt"))) {
+            for (Vendedor v : vendedores) {
+                out.println(v.getNome() + ";" + v.getCpf() + ";" + v.getNasc().getDia() + ";" + v.getNasc().getMes()
+                        + ";" + v.getNasc().getAno() + ";" + v.getSalarioBase() + ";" + v.getComissao());
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar vendedores: " + e.getMessage());
+        }
+    }
+
+    private void salvarGerentes() {
+        try (PrintWriter out = new PrintWriter(new FileWriter("gerentes.txt"))) {
+            for (Gerente g : gerentes) {
+                out.println(g.getNome() + ";" + g.getCpf() + ";" + g.getNasc().getDia() + ";" + g.getNasc().getMes()
+                        + ";" + g.getNasc().getAno() + ";" + g.getSalario(0, 0) + ";" + g.getSenha());
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar gerentes: " + e.getMessage());
+        }
+    }
+
+    private void salvarVendas() {
+        try (PrintWriter out = new PrintWriter(new FileWriter("vendas.txt"))) {
+            for (Vendedor v : vendedores) {
+                for (Venda venda : v.getVendidos()) {
+                    out.println(v.getCpf() + ";" + venda.getCliente().getCpf() + ";"
+                            + veiculos.indexOf(venda.getVeiculo()) + ";" + venda.getDesconto() + ";"
+                            + venda.getData().getDia() + ";" + venda.getData().getMes() + ";"
+                            + venda.getData().getAno() + ";" + venda.getChassi());
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar vendas: " + e.getMessage());
+        }
+    }
+
+    private void salvarDados() {
+        salvarVeiculos();
+        salvarClientes();
+        salvarVendedores();
+        salvarGerentes();
+        salvarVendas();
+    }
+
+    private void carregarVeiculos() {
+        try (Scanner scanner = new Scanner(new File("veiculos.txt"))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] data = line.split(";");
+                String marca = data[1];
+                String modelo = data[2];
+                int anoFab = Integer.parseInt(data[3]);
+                int mesFab = Integer.parseInt(data[4]);
+                int anoMod = Integer.parseInt(data[5]);
+                double valor = Double.parseDouble(data[6]);
+
+                switch (data[0]) {
+                    case "COMB":
+                        double autonomiaComb = Double.parseDouble(data[7]);
+                        double capacidadeComb = Double.parseDouble(data[8]);
+                        this.veiculos.add(new Combustao(marca, modelo, anoFab, mesFab, anoMod, valor, autonomiaComb, capacidadeComb));
+                        break;
+                    case "ELET":
+                        double autonomiaBat = Double.parseDouble(data[7]);
+                        double capacidadeBat = Double.parseDouble(data[8]);
+                        this.veiculos.add(new Eletrico(marca, modelo, anoFab, mesFab, anoMod, valor, autonomiaBat, capacidadeBat));
+                        break;
+                    case "HIBR":
+                        autonomiaComb = Double.parseDouble(data[7]);
+                        capacidadeComb = Double.parseDouble(data[8]);
+                        autonomiaBat = Double.parseDouble(data[9]);
+                        capacidadeBat = Double.parseDouble(data[10]);
+                        this.veiculos.add(new Hibrido(marca, modelo, anoFab, mesFab, anoMod, valor, autonomiaComb, capacidadeComb, autonomiaBat, capacidadeBat));
+                        break;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Arquivo de veículos não encontrado. Começando com lista vazia.");
+        }
+    }
+
+    private void carregarClientes() {
+        try (Scanner scanner = new Scanner(new File("clientes.txt"))) {
+            while (scanner.hasNextLine()) {
+                String[] data = scanner.nextLine().split(";");
+                this.clientes.add(new Cliente(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), data[5]));
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Arquivo de clientes não encontrado. Começando com lista vazia.");
+        }
+    }
+
+    private void carregarVendedores() {
+        try (Scanner scanner = new Scanner(new File("vendedores.txt"))) {
+            while (scanner.hasNextLine()) {
+                String[] data = scanner.nextLine().split(";");
+                this.vendedores.add(new Vendedor(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6])));
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Arquivo de vendedores não encontrado. Começando com lista vazia.");
+        }
+    }
+
+    private void carregarGerentes() {
+        try (Scanner scanner = new Scanner(new File("gerentes.txt"))) {
+            while (scanner.hasNextLine()) {
+                String[] data = scanner.nextLine().split(";");
+                this.gerentes.add(new Gerente(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Double.parseDouble(data[5]), data[6]));
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Arquivo de gerentes não encontrado. Começando com lista vazia.");
+        }
+    }
+
+    private void carregarVendas() {
+        try (Scanner scanner = new Scanner(new File("vendas.txt"))) {
+            while (scanner.hasNextLine()) {
+                String[] data = scanner.nextLine().split(";");
+                Vendedor vendedor = localizarVendedor(data[0]);
+                Cliente cliente = localizarCliente(data[1]);
+                Veiculo veiculo = veiculos.get(Integer.parseInt(data[2]));
+                double desconto = Double.parseDouble(data[3]);
+                Data vendaData = new Data(Integer.parseInt(data[4]), Integer.parseInt(data[5]), Integer.parseInt(data[6]));
+                String chassi = data[7];
+                Venda venda = new Venda(veiculo, cliente, desconto, vendaData, chassi);
+                vendedor.addVenda(venda);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Arquivo de vendas não encontrado. Começando sem histórico de vendas.");
+        } catch (ClienteNaoEncontradoException | VendedorNaoEncontradoException e) {
+            System.err.println("Erro ao carregar vendas: " + e.getMessage());
+        }
+    }
+
+    private void carregarDados() {
+        carregarVeiculos();
+        carregarClientes();
+        carregarVendedores();
+        carregarGerentes();
+        carregarVendas();
     }
 
     public void adicionar(Veiculo veiculo) {
         this.veiculos.add(veiculo);
+        salvarDados();
     }
 
     public void adicionar(Vendedor vendedor) {
         this.vendedores.add(vendedor);
+        salvarDados();
     }
 
     public void adicionar(Gerente gerente) {
         this.gerentes.add(gerente);
+        salvarDados();
     }
 
     public void adicionar(Cliente cliente) {
         this.clientes.add(cliente);
+        salvarDados();
     }
 
     public void listarClientes() {
@@ -102,6 +289,7 @@ public class Sistema {
 
     public void atribuirVendaVendedor(Venda venda, Vendedor vendedor) {
         vendedor.addVenda(venda);
+        salvarDados();
     }
 
     public void relatorio(int mes, int ano) {

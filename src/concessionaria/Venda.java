@@ -39,6 +39,14 @@ public class Venda {
         return veiculo;
     }
 
+    public double getDesconto() {
+        return desconto;
+    }
+
+    public String getChassi() {
+        return chassi;
+    }
+
 
     public String toString() {
         String veiculoInfo = "Veiculo: " + this.veiculo.toString();

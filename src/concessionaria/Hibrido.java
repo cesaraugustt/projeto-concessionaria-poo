@@ -20,6 +20,22 @@ public class Hibrido extends Veiculo{
         return (this.autonomiaBat + this.autonomiaComb);
     }
 
+    public double getAutonomiaComb() {
+        return autonomiaComb;
+    }
+
+    public double getCapacidadeComb() {
+        return capacidadeComb;
+    }
+
+    public double getAutonomiaBat() {
+        return autonomiaBat;
+    }
+
+    public double getCapacidadeBat() {
+        return capacidadeBat;
+    }
+
     @Override
     public String toString() {
         return super.toString() + " (Híbrido)";

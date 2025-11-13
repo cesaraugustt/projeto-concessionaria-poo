@@ -17,6 +17,26 @@ public class Veiculo {
         this.valor = valor;
     }
 
+    public String getMarca() {
+        return marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public int getAnoFab() {
+        return anoFab;
+    }
+
+    public int getMesFab() {
+        return mesFab;
+    }
+
+    public int getAnoMod() {
+        return anoMod;
+    }
+
     public double getAutonomia() {
         return 0;
     }
