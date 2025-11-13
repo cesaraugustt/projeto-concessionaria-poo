@@ -120,19 +120,19 @@ public class Sistema {
                     case "COMB":
                         double autonomiaComb = Double.parseDouble(data[7]);
                         double capacidadeComb = Double.parseDouble(data[8]);
-                        adicionar(new Combustao(marca, modelo, anoFab, mesFab, anoMod, valor, autonomiaComb, capacidadeComb));
+                        this.veiculos.add(new Combustao(marca, modelo, anoFab, mesFab, anoMod, valor, autonomiaComb, capacidadeComb));
                         break;
                     case "ELET":
                         double autonomiaBat = Double.parseDouble(data[7]);
                         double capacidadeBat = Double.parseDouble(data[8]);
-                        adicionar(new Eletrico(marca, modelo, anoFab, mesFab, anoMod, valor, autonomiaBat, capacidadeBat));
+                        this.veiculos.add(new Eletrico(marca, modelo, anoFab, mesFab, anoMod, valor, autonomiaBat, capacidadeBat));
                         break;
                     case "HIBR":
                         autonomiaComb = Double.parseDouble(data[7]);
                         capacidadeComb = Double.parseDouble(data[8]);
                         autonomiaBat = Double.parseDouble(data[9]);
                         capacidadeBat = Double.parseDouble(data[10]);
-                        adicionar(new Hibrido(marca, modelo, anoFab, mesFab, anoMod, valor, autonomiaComb, capacidadeComb, autonomiaBat, capacidadeBat));
+                        this.veiculos.add(new Hibrido(marca, modelo, anoFab, mesFab, anoMod, valor, autonomiaComb, capacidadeComb, autonomiaBat, capacidadeBat));
                         break;
                 }
             }
@@ -145,7 +145,7 @@ public class Sistema {
         try (Scanner scanner = new Scanner(new File("clientes.txt"))) {
             while (scanner.hasNextLine()) {
                 String[] data = scanner.nextLine().split(";");
-                adicionar(new Cliente(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), data[5]));
+                this.clientes.add(new Cliente(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), data[5]));
             }
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo de clientes não encontrado. Começando com lista vazia.");
@@ -156,7 +156,7 @@ public class Sistema {
         try (Scanner scanner = new Scanner(new File("vendedores.txt"))) {
             while (scanner.hasNextLine()) {
                 String[] data = scanner.nextLine().split(";");
-                adicionar(new Vendedor(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6])));
+                this.vendedores.add(new Vendedor(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6])));
             }
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo de vendedores não encontrado. Começando com lista vazia.");
@@ -167,7 +167,7 @@ public class Sistema {
         try (Scanner scanner = new Scanner(new File("gerentes.txt"))) {
             while (scanner.hasNextLine()) {
                 String[] data = scanner.nextLine().split(";");
-                adicionar(new Gerente(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Double.parseDouble(data[5]), data[6]));
+                this.gerentes.add(new Gerente(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Double.parseDouble(data[5]), data[6]));
             }
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo de gerentes não encontrado. Começando com lista vazia.");
