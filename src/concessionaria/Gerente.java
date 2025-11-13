@@ -1,6 +1,6 @@
 package concessionaria;
 
-public class Gerente extends Funcionario{
+public class Gerente extends Funcionario implements IAutenticavel {
     private String senha;
 
     public Gerente(String nome, String cpf, int dia, int mes, int ano, double salario, String senha) {
@@ -8,6 +8,7 @@ public class Gerente extends Funcionario{
         this.senha = senha;
     }
 
+    @Override
     public boolean validarAcesso(String senha) {
         return this.senha.equals(senha);
     }
