@@ -17,3 +17,4 @@
 ./src/concessionaria/IAutenticavel.java
 ./src/concessionaria/Sistema.java
 ./src/concessionaria/Eletrico.java
+./test/concessionaria/OrdenacaoTest.java
