@@ -1,10 +1,11 @@
 package concessionaria;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Vendedor extends Funcionario{
     private double comissao;
-    private ArrayList<Venda> vendidos;
+    private List<Venda> vendidos;
 
     public Vendedor(String nome, String cpf, int dia, int mes, int ano, double salario, double comissao) {
         super(nome, cpf, dia, mes, ano, salario);
@@ -38,7 +39,7 @@ public class Vendedor extends Funcionario{
         return comissao;
     }
 
-    public ArrayList<Venda> getVendidos() {
+    public List<Venda> getVendidos() {
         return this.vendidos;
     }
 }

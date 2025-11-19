@@ -1,6 +1,6 @@
 package concessionaria;
 
-public abstract class Pessoa {
+public abstract class Pessoa implements Comparable<Pessoa> {
     protected String nome;
     protected String cpf;
     protected Data nasc;
@@ -37,5 +37,9 @@ public abstract class Pessoa {
         return this.nome + " - CPF: " + this.cpf;
     }
 
+    @Override
+    public int compareTo(Pessoa outra) {
+        return this.nome.compareTo(outra.nome);
+    }
 }
 

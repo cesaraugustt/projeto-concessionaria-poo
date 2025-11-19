@@ -5,6 +5,10 @@ import concessionaria.exceptions.GerenteNaoEncontradoException;
 import concessionaria.exceptions.VeiculoNaoEncontradoException;
 import concessionaria.exceptions.VendedorNaoEncontradoException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,10 +17,10 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Sistema {
-    private ArrayList<Veiculo> veiculos;
-    private ArrayList<Vendedor> vendedores;
-    private ArrayList<Gerente> gerentes;
-    private ArrayList<Cliente> clientes;
+    private List<Veiculo> veiculos;
+    private List<Vendedor> vendedores;
+    private List<Gerente> gerentes;
+    private List<Cliente> clientes;
 
     public Sistema() {
         this.veiculos = new ArrayList<>();
@@ -224,6 +228,7 @@ public class Sistema {
 
     public void listarClientes() {
         System.out.println("Clientes cadastrados:");
+        Collections.sort(this.clientes);
         for (Cliente c : this.clientes) {
             System.out.println(c.toString());
         }
@@ -231,6 +236,7 @@ public class Sistema {
 
     public void listarVendedores() {
         System.out.println("Vendedores cadastrados:");
+        Collections.sort(this.vendedores);
         for (Vendedor v : this.vendedores) {
             System.out.println(v.toString());
         }
@@ -238,6 +244,7 @@ public class Sistema {
 
     public void listarGerentes() {
         System.out.println("Gerentes cadastrados:");
+        Collections.sort(this.gerentes);
         for (Gerente g : this.gerentes) {
             System.out.println(g.toString());
         }
@@ -245,6 +252,7 @@ public class Sistema {
 
     public void listarVeiculos() {
         System.out.println("Veiculos cadastrados:");
+        this.veiculos.sort(Comparator.comparingDouble(Veiculo::getValor));
         int i = 1;
         for (Veiculo v : this.veiculos) {
             System.out.println(i + ") " + v.toString());
@@ -297,13 +305,18 @@ public class Sistema {
         System.out.println("RELATÓRIO DE VENDAS MENSAL DE " + mes + "/" + ano + ":");
         double totalMes = 0;
 
+        Collections.sort(this.vendedores);
+
         for (Vendedor v : this.vendedores) {
             double salarioMes = v.getSalario(mes, ano);
-            ArrayList<Venda> vendasVendedor = v.getVendidos();
+            List<Venda> vendasVendedor = v.getVendidos().stream()
+                .filter(venda -> venda.getData().getMes() == mes && venda.getData().getAno() == ano)
+                .sorted(Comparator.comparingDouble(Venda::valor).reversed())
+                .collect(Collectors.toList());
 
-            for (Venda venda : vendasVendedor ) {
-                if (venda.getData().getMes() == mes && venda.getData().getAno() == ano) {
-                    System.out.println("Vendedor: " + v.getNome() + " (Salário neste mês: R$" + salarioMes + ")");
+            if (!vendasVendedor.isEmpty()) {
+                System.out.println("Vendedor: " + v.getNome() + " (Salário neste mês: R$" + salarioMes + ")");
+                for (Venda venda : vendasVendedor) {
                     System.out.println("Veiculo: " + venda.getVeiculo().toString());
                     System.out.println("Cliente: " + venda.getCliente().toString());
                     System.out.println("Valor da venda: R$" + venda.valor());
@@ -323,12 +336,17 @@ public class Sistema {
         System.out.println("RELATÓRIO DE VENDAS ANUAL DE " + ano + ":");
         double totalAno = 0;
 
-        for (Vendedor v : this.vendedores) {
-            ArrayList<Venda> vendasVendedor = v.getVendidos();
+        Collections.sort(this.vendedores);
 
-            for (Venda venda : vendasVendedor) {
-                if (venda.getData().getAno() == ano) {
-                    System.out.println("Vendedor: " + v.getNome());
+        for (Vendedor v : this.vendedores) {
+            List<Venda> vendasVendedor = v.getVendidos().stream()
+                .filter(venda -> venda.getData().getAno() == ano)
+                .sorted(Comparator.comparingDouble(Venda::valor).reversed())
+                .collect(Collectors.toList());
+
+            if (!vendasVendedor.isEmpty()) {
+                System.out.println("Vendedor: " + v.getNome());
+                for (Venda venda : vendasVendedor) {
                     System.out.println("Veiculo: " + venda.getVeiculo().toString());
                     System.out.println("Cliente: " + venda.getCliente().toString());
                     System.out.println("Valor da venda: R$" + venda.valor());
@@ -349,7 +367,9 @@ public class Sistema {
         System.out.println("Vendas do vendedor " + vendedor.getNome() + ":");
         double totalVendedor = 0;
 
-        ArrayList<Venda> vendasVendedor = vendedor.getVendidos();
+        List<Venda> vendasVendedor = vendedor.getVendidos().stream()
+            .sorted(Comparator.comparingDouble(Venda::valor).reversed())
+            .collect(Collectors.toList());
 
         if (vendasVendedor.isEmpty()) {
             System.out.println("Este vendedor ainda não realizou nenhuma venda.");
