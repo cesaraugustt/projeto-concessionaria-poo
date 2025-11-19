@@ -1,116 +1,165 @@
-##########################################
-# Opção 1 (Cadastrar cliente)
-##########################################
-1
-Hilario Seibel Junior
-123
-4
-12
-1981
-hsjunior@gmail.com
-##########################################
-# Opção 1 (Cadastrar cliente)
-##########################################
-1
-Wagner Kirmse
-234
-8
-8
-1921
-wagnerkc@gmail.com
-##########################################
-# Opção 2 (Cadastrar Vendedor)
-##########################################
-2
-Maria da Silva
-345
-3
-3
-2003
-3000
-0.2
-##########################################
+###################################################################
+# TESTE DE ROBUSTEZ E ORDENAÇÃO DO SISTEMA
+###################################################################
+
+# --- 1. TESTE DE EXCEÇÕES DE ENTRADA (Menu) ---
+# Tenta digitar texto no menu. O sistema deve ignorar e pedir de novo.
+abc
+zero
+
+# --- 2. CADASTRAR GERENTE ---
 # Opção 3
-##########################################
 3
-Pedro da Silva
-456
-4
-4
-4
-4000
-456
-##########################################
-# Opção 4 (Cadastrar Veículo)
-##########################################
-4
-BYD
-Song Pro
-2025
-7
-2026
-199000
-# Tipo do veículo (3 - híbrido)
+Chefe da Silva
+999
+1
+1
+1980
+10000
+senha123
+
+# --- 3. CADASTRAR VENDEDORES (Para testar Ordenação A-Z) ---
+# Cadastra "Zack" primeiro (deve aparecer por último no relatório)
+2
+Zack
+888
+2
+2
+1990
+2000
+0.05
+# Cadastra "Ana" depois (deve aparecer primeiro no relatório)
+2
+Ana
+111
 3
-1000
+3
+1995
+2000
+0.05
+
+# --- 4. CADASTRAR CLIENTES ---
+1
+Cliente Comprador
+777
+5
+5
+2000
+cliente@teste.com
+
+# --- 5. CADASTRAR VEÍCULOS (Para testar Ordenação por Preço) ---
+# Inserimos fora de ordem de preço.
+# 1º: Híbrido (Preço Médio: 80.000)
+4
+Toyota
+Prius
+2024
+1
+2024
+80000
+3
+800
+40
 50
-110
-18
-##########################################
-# Opção 4 (Cadastrar Veículo)
-##########################################
+10
+
+# 2º: Combustão (Preço Barato: 20.000)
 4
-Honda
-HRV
-2015
-7
-2016
-70000
-# Tipo do veículo (2 - combustão)
+Fiat
+Uno
+2010
+1
+2010
+20000
 2
 400
-50
-##########################################
-# Opção 5 (Cadastrar venda)
-##########################################
-5
-345
+40
+
+# 3º: Elétrico (Preço Caro: 200.000)
+# Teste de erro: digita 'mil' no valor antes de acertar
+4
+Tesla
+Model 3
+2025
 1
-123
-5000
-5
-9
 2025
-12345
-##########################################
-# Opção 5 (Cadastrar venda)
-##########################################
+mil
+200000
+1
+500
+60
+
+# --- 6. REALIZAR VENDAS (Testar Lógica e Exceções) ---
+# Venda 1: Teste de Vendedor Inexistente
 5
-345
+000
+# O sistema vai reclamar (VendedorNaoEncontrado). O loop de venda reinicia ou sai?
+# Assumindo que o seu cadVenda captura e sai, voltamos ao menu.
+# Se o seu cadVenda pede o CPF de novo, o input abaixo pode quebrar.
+# Vamos assumir o fluxo feliz agora:
+
+# Venda 1: Ana vende o Carro Caro (Tesla)
+# O sistema ordena veículos por preço. A lista será:
+# 1) Uno (20k)
+# 2) Prius (80k)
+# 3) Tesla (200k)
+# Escolhemos '3' (Tesla)
+5
+111
+3
+777
+0
+10
+10
+2025
+CHASSI-TESLA
+
+# Venda 2: Ana vende o Carro Barato (Uno)
+# Escolhemos '1' (Uno)
+5
+111
+1
+777
+0
+15
+10
+2025
+CHASSI-UNO
+
+# Venda 3: Zack vende o Carro Médio (Prius)
+# Escolhemos '2' (Prius)
+5
+888
 2
-234
-2500
-10
+777
+0
+20
 10
 2025
-23456
-##########################################
-# Opção 6 (Relatório por mês):
-##########################################
+CHASSI-PRIUS
+
+# --- 7. RELATÓRIOS (A Prova Real) ---
+
+# Relatório Mensal (Opção 6)
+# Verificar:
+# 1. Ana aparece antes de Zack? (Sim = Comparable funcionou)
+# 2. Nas vendas de Ana, o Tesla (200k) aparece antes do Uno (20k)? (Sim = Comparator Venda funcionou)
 6
-9
+10
 2025
-##########################################
-# Opção 7 (Relatório por ano):
-##########################################
+
+# Relatório Anual (Opção 7)
 7
 2025
-##########################################
-# Opção 8 (Relatório por vendedor):
-##########################################
+
+# Relatório por Vendedor (Opção 8)
+# Ana (111)
 8
-345
-##########################################
-# Sair
-##########################################
+111
+
+# Relatório por Vendedor Inexistente (Teste de Exceção)
+8
+000
+
+# --- 8. SAIR ---
 0

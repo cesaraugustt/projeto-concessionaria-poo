@@ -42,4 +42,3 @@ public abstract class Pessoa implements Comparable<Pessoa> {
         return this.nome.compareTo(outra.nome);
     }
 }
-

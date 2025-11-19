@@ -35,16 +35,16 @@ public class Sistema {
             for (Veiculo v : veiculos) {
                 String commonPart = v.getMarca() + ";" + v.getModelo() + ";" + v.getAnoFab() + ";" + v.getMesFab() + ";"
                         + v.getAnoMod() + ";" + v.getValor();
-                if (v instanceof Combustao) {
-                    Combustao c = (Combustao) v;
-                    out.println("COMB;" + commonPart + ";" + c.getAutonomia() + ";" + c.getCapacidadeComb());
-                } else if (v instanceof Eletrico) {
-                    Eletrico e = (Eletrico) v;
-                    out.println("ELET;" + commonPart + ";" + e.getAutonomia() + ";" + e.getCapacidadeBat());
-                } else if (v instanceof Hibrido) {
-                    Hibrido h = (Hibrido) v;
-                    out.println("HIBR;" + commonPart + ";" + h.getAutonomiaComb() + ";" + h.getCapacidadeComb() + ";"
-                            + h.getAutonomiaBat() + ";" + h.getCapacidadeBat());
+                switch (v) {
+                    case Combustao c ->
+                            out.println("COMB;" + commonPart + ";" + c.getAutonomia() + ";" + c.getCapacidadeComb());
+                    case Eletrico e ->
+                            out.println("ELET;" + commonPart + ";" + e.getAutonomia() + ";" + e.getCapacidadeBat());
+                    case Hibrido h ->
+                            out.println("HIBR;" + commonPart + ";" + h.getAutonomiaComb() + ";" + h.getCapacidadeComb() + ";"
+                                    + h.getAutonomiaBat() + ";" + h.getCapacidadeBat());
+                    default -> {
+                    }
                 }
             }
         } catch (IOException e) {
@@ -312,7 +312,7 @@ public class Sistema {
             List<Venda> vendasVendedor = v.getVendidos().stream()
                 .filter(venda -> venda.getData().getMes() == mes && venda.getData().getAno() == ano)
                 .sorted(Comparator.comparingDouble(Venda::valor).reversed())
-                .collect(Collectors.toList());
+                .toList();
 
             if (!vendasVendedor.isEmpty()) {
                 System.out.println("Vendedor: " + v.getNome() + " (Salário neste mês: R$" + salarioMes + ")");
@@ -342,7 +342,7 @@ public class Sistema {
             List<Venda> vendasVendedor = v.getVendidos().stream()
                 .filter(venda -> venda.getData().getAno() == ano)
                 .sorted(Comparator.comparingDouble(Venda::valor).reversed())
-                .collect(Collectors.toList());
+                .toList();
 
             if (!vendasVendedor.isEmpty()) {
                 System.out.println("Vendedor: " + v.getNome());
@@ -369,7 +369,7 @@ public class Sistema {
 
         List<Venda> vendasVendedor = vendedor.getVendidos().stream()
             .sorted(Comparator.comparingDouble(Venda::valor).reversed())
-            .collect(Collectors.toList());
+            .toList();
 
         if (vendasVendedor.isEmpty()) {
             System.out.println("Este vendedor ainda não realizou nenhuma venda.");
