@@ -228,33 +228,37 @@ public class Sistema {
 
     public void listarClientes() {
         System.out.println("Clientes cadastrados:");
-        Collections.sort(this.clientes);
-        for (Cliente c : this.clientes) {
+        List<Cliente> clientesOrdenados = new ArrayList<>(this.clientes);
+        Collections.sort(clientesOrdenados);
+        for (Cliente c : clientesOrdenados) {
             System.out.println(c.toString());
         }
     }
 
     public void listarVendedores() {
         System.out.println("Vendedores cadastrados:");
-        Collections.sort(this.vendedores);
-        for (Vendedor v : this.vendedores) {
+        List<Vendedor> vendedoresOrdenados = new ArrayList<>(this.vendedores);
+        Collections.sort(vendedoresOrdenados);
+        for (Vendedor v : vendedoresOrdenados) {
             System.out.println(v.toString());
         }
     }
 
     public void listarGerentes() {
         System.out.println("Gerentes cadastrados:");
-        Collections.sort(this.gerentes);
-        for (Gerente g : this.gerentes) {
+        List<Gerente> gerentesOrdenados = new ArrayList<>(this.gerentes);
+        Collections.sort(gerentesOrdenados);
+        for (Gerente g : gerentesOrdenados) {
             System.out.println(g.toString());
         }
     }
 
     public void listarVeiculos() {
         System.out.println("Veiculos cadastrados:");
-        this.veiculos.sort(Comparator.comparingDouble(Veiculo::getValor));
+        List<Veiculo> veiculosOrdenados = new ArrayList<>(this.veiculos);
+        veiculosOrdenados.sort(Comparator.comparingDouble(Veiculo::getValor));
         int i = 1;
-        for (Veiculo v : this.veiculos) {
+        for (Veiculo v : veiculosOrdenados) {
             System.out.println(i + ") " + v.toString());
             i++;
         }
@@ -336,13 +340,20 @@ public class Sistema {
         System.out.println("RELATÓRIO DE VENDAS ANUAL DE " + ano + ":");
         double totalAno = 0;
 
-        Collections.sort(this.vendedores);
+        List<Vendedor> vendedoresOrdenados = new ArrayList<>(this.vendedores);
+        Collections.sort(vendedoresOrdenados);
 
-        for (Vendedor v : this.vendedores) {
-            List<Venda> vendasVendedor = v.getVendidos().stream()
-                .filter(venda -> venda.getData().getAno() == ano)
-                .sorted(Comparator.comparingDouble(Venda::valor).reversed())
-                .toList();
+        for (Vendedor v : vendedoresOrdenados) {
+            List<Venda> vendasVendedor = new ArrayList<>();
+            for (Venda venda : v.getVendidos()) {
+                if (venda.getData().getAno() == ano) {
+                    vendasVendedor.add(venda);
+                }
+            }
+
+            vendasVendedor.sort(Comparator.comparing(Venda::valor).reversed()
+                    .thenComparing(Venda::getData, Comparator.reverseOrder())
+                    .thenComparing(venda -> venda.getCliente().getCpf()));
 
             if (!vendasVendedor.isEmpty()) {
                 System.out.println("Vendedor: " + v.getNome());
